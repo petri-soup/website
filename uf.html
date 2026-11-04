@@ -1,1 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Ellen Fritz, portfolio for MFA Art + Technology, University of Florida</title>
+<link rel="icon" href="images/babyfavi.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #1c2619;
+  --ink: #cfed9f;
+  --muted: #9db08f;
+  --rule: #ffc04a;
+  --accent: #ffc04a;
+  --pad: clamp(1rem, 4vw, 2rem);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 14px/1.5 "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+a:active, button:active { opacity: .7; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.muted { color: var(--muted); }
+.wrap { max-width: 980px; margin: 0 auto; padding: var(--pad); }
 
+/* ---------- header ---------- */
+.head { padding-bottom: 1.5rem; }
+.name { margin: 0 0 .2em; font: inherit; font-size: 1.5em; font-weight: 500; color: var(--accent); letter-spacing: -0.02em; }
+.program { margin: 0 0 1.4em; color: var(--muted); }
+.bio { max-width: 64ch; margin: 0 0 1.2em; }
+.links { display: flex; flex-wrap: wrap; gap: .3em 1.2em; margin: 0; }
+
+/* ---------- project ---------- */
+.project { border-top: 1px solid var(--rule); padding: 1.4rem 0 2rem; }
+.title { margin: 0 0 .5em; font: inherit; font-size: 1.2em; font-weight: 500; }
+.meta { margin: 0 0 1.2em; display: grid; grid-template-columns: max-content 1fr; gap: .2em 1.2em; font-size: 13px; }
+.meta dt { color: var(--muted); }
+.meta dd { margin: 0; }
+.desc { margin: 0 0 1em; max-width: 68ch; }
+.plinks { display: flex; flex-wrap: wrap; gap: .3em 1.2em; margin: 0 0 1.4em; }
+
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1rem; align-items: start; margin-top: 1.2rem; }
+.shots figure { margin: 0; }
+.shots img { display: block; width: 100%; height: auto; }
+.zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+figcaption { margin-top: .5em; font-size: 13px; color: var(--muted); max-width: 52ch; }
+.video { position: relative; width: 100%; aspect-ratio: 16 / 9; margin-top: 1.2rem; background: #000; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.missing { display: grid; place-items: center; min-height: 10rem; padding: 1rem; border: 1px dashed var(--muted); color: var(--muted); text-align: center; }
+.video.missing { position: static; aspect-ratio: 16 / 9; }
+
+.foot { border-top: 1px solid var(--rule); padding-top: 1rem; font-size: 13px; }
+
+/* ---------- lightbox ---------- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 50; background: var(--bg);
+  display: grid; grid-template-rows: 1fr auto;
+  padding: calc(3rem + env(safe-area-inset-top, 0px)) 2rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  visibility: hidden; opacity: 0; transition: opacity .2s ease;
+}
+.lightbox.show { visibility: visible; opacity: 1; }
+.lightbox .stage { min-height: 0; display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
+.lightbox .stage img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.lightbox .bar { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; font-size: 13px; }
+.lightbox .nav { display: flex; gap: 1.2rem; white-space: nowrap; }
+.lightbox .x { position: absolute; top: calc(1rem + env(safe-area-inset-top, 0px)); right: 1.2rem; }
+.linkbtn { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+@media (max-width: 600px) {
+  .meta { grid-template-columns: 1fr; gap: 0; }
+  .meta dt { margin-top: .5em; }
+  .lightbox { padding-left: 1rem; padding-right: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <h1 class="name">Ellen Fritz</h1>
+    <p class="program">Portfolio for MFA Art + Technology, University of Florida</p>
+    <p class="bio">I’m a 3D artist, game developer, and painter using game engines to populate digital ecosystems with speculative flora and fauna. I received my BFA from Rhode Island School of Design in 2025, and I’m a research assistant at the DWELL Lab at URI.</p>
+    <p class="links">
+      <a href="mailto:ellen0fritz@gmail.com">Email ↗</a>
+      <a href="https://petri-soup.github.io/ellens-cv/" target="_blank" rel="noopener">CV ↗</a>
+      <a href="https://petri-soup.github.io/portfolio/" target="_blank" rel="noopener">Full portfolio ↗</a>
+    </p>
+  </header>
+
+  <main id="list"><noscript>This portfolio needs JavaScript to display. Please enable it, or see the full portfolio at petri-soup.github.io/portfolio.</noscript></main>
+
+  <p class="foot muted">© <span id="year">2026</span> Ellen Fritz</p>
+</div>
+
+<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="linkbtn x" id="lbClose" type="button">Close ✕</button>
+  <div class="stage" id="lbStage"></div>
+  <div class="bar">
+    <span id="lbCaption" class="muted"></span>
+    <span class="nav"><button class="linkbtn" id="lbPrev" type="button">← Prev</button><span id="lbCount" class="muted"></span><button class="linkbtn" id="lbNext" type="button">Next →</button></span>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   EDIT YOUR PROJECTS HERE (order = order on the page)
+
+   title, desc       text shown under the heading
+   meta              label/value rows (Year, Medium, Role, ...)
+   links             [{ label, url }]
+   images            [{ src, caption }]   src "" shows a "TODO" box
+   vimeoId           optional: embeds one video (ID only)
+
+   Limits to respect: 20 items total (each image and each video
+   counts as 1). Check the console (F12) for your running count
+   and a list of leftover TODO placeholders.
+   ========================================================= */
+const PROJECTS = [
+  {
+    "title": "Anima Hominis",
+    "meta": {
+      "Year": "2026, in development",
+      "Medium": "Unreal Engine, Blender, ZBrush, photogrammetry",
+      "With": "Museum für Naturkunde Berlin; Monument Preservation Office Baden-Württemberg"
+    },
+    "desc": "In-development virtual environment exploring the ways early human cognition, spiritual imagination, and animism evolved in conjunction with an extinct natural world. The narrative is drawn forward by the player’s discovery of artifacts left behind in caves 40,000 years ago.",
+    "links": [],
+    "images": [
+      {
+        "src": "images/cave3.jpg",
+        "caption": "still render, cave mouth"
+      },
+      {
+        "src": "images/cave2.jpg",
+        "caption": "still render, interior of Vogelherd Cave"
+      },
+      {
+        "src": "images/cave4.jpg",
+        "caption": "still render, Pleistocene ecosystem"
+      }
+    ]
+  },
+  {
+    "title": "Paleomythica",
+    "meta": {
+      "Year": "2025–26",
+      "Medium": "Unity, Blender, ZBrush"
+    },
+    "desc": "Fictional ecosystem rooted in the concept of Geomythology, the study of stories that attempt to explain fossils, extreme weather events, and other natural phenomena. Players traverse an environment where organisms from distant places and times form a virtual bestiary that brings dense research in paleontology, archaeology, and mythology into a superimposed landscape.",
+    "links": [
+      {
+        "label": "Itch.io page",
+        "url": "https://3lfritz.itch.io/paleomythica"
+      },
+      {
+        "label": "Asset samples",
+        "url": "https://petri-soup.github.io/paleomythica-bestiary/"
+      }
+    ],
+    "images": [
+      {
+        "src": "images/paleo2.jpg",
+        "caption": "still, chalicotherium and saguaro"
+      },
+      {
+        "src": "images/paleo4.jpg",
+        "caption": "still, from the pond"
+      },
+      {
+        "src": "images/paleo5.jpg",
+        "caption": "aerial map of game"
+      }
+    ]
+  },
+  {
+    "title": "Tidelands 2100",
+    "meta": {
+      "Year": "2025–2026",
+      "Medium": "Unreal Engine, Unity, Blender, ZBrush, Substance Painter/Designer",
+      "Role": "Art Director, 3D Artist",
+      "With": "Annie Chen and Zoe Lee of BEAM Studio, Ian Haut, Healey Koch"
+    },
+    "desc": "Game world that imagines Rhode Island’s coastal ecosystem and society in the year 2100, under the effects of sea level rise, marshland migration, and state withdrawal from the region. In the game, you uncover geomagnetic technologies that bring you to a closer understanding of what happened to the coast, and the people that lived there, over the last 75 years.",
+    "links": [
+      {
+        "label": "Trailer",
+        "url": "https://vimeo.com/1166821492"
+      },
+      {
+        "label": "Play the prototype",
+        "url": "https://3lfritz.itch.io/tidelands-2100"
+      }
+    ],
+    "images": [
+      {
+        "src": "images/Tidelands2.jpg",
+        "caption": "still render, benthic ecosystem"
+      },
+      {
+        "src": "images/tidelands4.jpg",
+        "caption": "still render, cable ferry"
+      },
+      {
+        "src": "images/tidelands5.jpg",
+        "caption": "playable prototype in Unity"
+      }
+    ]
+  },
+  {
+    "title": "Nature in Place: AR for Climate Resilience (ENACTS)",
+    "meta": {
+      "Year": "2025–26",
+      "Role": "Research Assistant, AR Developer, 3D Modeler",
+      "Supported by": "NSF, Agog Immersive Media Grant",
+      "With": "Madison Jones, Johanna Barthmaier-Payne, Tanmayee More"
+    },
+    "desc": "NSF-funded, multi-institution research initiative using augmented reality (AR) to include community members in redesigning their own neighborhoods for adaptivity and climate resilience. Through co-creation workshops, residents learn about Nature-Based Solutions like tree canopies, bioswales, rain gardens, and stormwater parks, and use AR to virtually re-imagine and walk through their visions for local green spaces. I modeled and textured 3D assets, and facilitated co-creation workshops in Rhode Island and Kentucky.",
+    "links": [
+      {
+        "label": "Asset samples",
+        "url": "https://petri-soup.github.io/enacts-assets/"
+      },
+      {
+        "label": "EPSCoR announcement",
+        "url": "https://www.nhepscor.org/projects/enacts"
+      }
+    ],
+    "images": [
+      {
+        "src": "images/enacts4.jpg",
+        "caption": "rain garden in AR, during workshop"
+      },
+      {
+        "src": "images/enacts2.jpg",
+        "caption": "New Hampshire site model in Blender"
+      }
+    ]
+  },
+  {
+    "title": "Ceramics",
+    "meta": {
+      "Year": "TODO",
+      "Medium": "TODO: clay body and glazes"
+    },
+    "desc": "Ceramic sculptures function as static maps and preserved fossils of the ecosystems.",
+    "links": [],
+    "images": [
+      {
+        "src": "images/cave5.png",
+        "caption": "ceramic fossil tests (TODO: add year, clay and glaze, dimensions)"
+      },
+      {
+        "src": "",
+        "caption": "TODO: title, year, clay body and glaze, dimensions"
+      },
+      {
+        "src": "",
+        "caption": "TODO: title, year, clay body and glaze, dimensions"
+      }
+    ]
+  },
+  {
+    "title": "Paintings",
+    "meta": {
+      "Year": "2023–25"
+    },
+    "desc": "Evogeneao explores speculative biology, deep mapping, hypermedia, and mass extinction through virtual and physical mediums.",
+    "links": [
+      {
+        "label": "Evogeneao thesis site",
+        "url": "https://petri-soup.github.io/thesis-journal/"
+      }
+    ],
+    "images": [
+      {
+        "src": "images/thesis1.jpg",
+        "caption": "Particles Under Observation, 2024–25. Oil, ink, pastel on canvas, 68 × 68 in."
+      },
+      {
+        "src": "images/thesiscover.jpg",
+        "caption": "Antikythera, 2024–25. Oil on canvas, 72 × 38 in."
+      },
+      {
+        "src": "images/springssecretsources.jpg",
+        "caption": "Springs and Secret Sources, 2023–24. Oil, gold, ink on canvas, 68 × 72 in."
+      }
+    ]
+  },
+  {
+    "title": "Evogeneao",
+    "meta": {
+      "Year": "2025",
+      "Medium": "Unity, Blender, ZBrush",
+      "Length": "TODO"
+    },
+    "desc": "Fictional ecosystems and organisms of 5 islands post mass-extinction. I used GIS data of landscapes on Earth as the 3D base for the five islands, bringing satellite imagery into this fantasy environment.",
+    "links": [
+      {
+        "label": "Play in browser",
+        "url": "https://play.unity.com/en/games/bd86650d-5819-49b0-a4be-c7f25b4187e2/evogeneao"
+      }
+    ],
+    "vimeoId": "",
+    "images": []
+  },
+  {
+    "title": "Genesis, Earth Diver",
+    "meta": {
+      "Year": "2024",
+      "Medium": "Blender, ZBrush",
+      "Length": "2m53s"
+    },
+    "desc": "Digital diorama modelled, staged, and animated in Blender that explores various theories as to how life originated on Earth, both religious and scientific. Mythological and paleo-creatures live together in the same collapsed ecosystem, the division between the empiricism of science and imagination of mythology dissolved.",
+    "links": [],
+    "vimeoId": "1080895104",
+    "images": []
+  },
+  {
+    "title": "The Big Spawn",
+    "meta": {
+      "Year": "2023",
+      "Medium": "TODO",
+      "Length": "TODO"
+    },
+    "desc": "Corals spawn collectively under lunar cycles, with thin boundaries between individual species or the polyps and algae within them. I 3D scanned bleached coral skeletons and digitally revitalized them to stage an intricate reef. As coral populations decline, this digital scene preserves these alien-like underwater landscapes for future generations to experience.",
+    "links": [],
+    "vimeoId": "1001774532",
+    "images": []
+  }
+];
+
+/* ---------- helpers ---------- */
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ---------- render ---------- */
+const list = document.getElementById("list");
+list.innerHTML = PROJECTS.map((p, pi) => {
+  let zi = 0;
+  const shots = (p.images || []).map(im => {
+    if (!im.src) {
+      return `<figure><div class="missing">Image goes here</div><figcaption>${esc(im.caption)}</figcaption></figure>`;
+    }
+    const idx = zi++;
+    return `<figure>
+      <button class="zoom" type="button" data-p="${pi}" data-i="${idx}" aria-label="Enlarge: ${esc(im.caption)}"><img src="${esc(im.src)}" alt="${esc(im.caption)}" loading="lazy"></button>
+      <figcaption>${esc(im.caption)}</figcaption>
+    </figure>`;
+  }).join("");
+  const video = ("vimeoId" in p)
+    ? (p.vimeoId
+        ? `<div class="video"><iframe src="https://player.vimeo.com/video/${esc(p.vimeoId)}?dnt=1" title="${esc(p.title)} (video)" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
+        : `<div class="video missing">Add this video’s Vimeo ID</div>`)
+    : "";
+  const meta = Object.entries(p.meta || {});
+  return `
+  <section class="project">
+    <h2 class="title">${esc(p.title)}</h2>
+    ${meta.length ? `<dl class="meta">${meta.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
+    <p class="desc">${esc(p.desc)}</p>
+    ${(p.links || []).length ? `<p class="plinks">${p.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</p>` : ""}
+    ${video}
+    ${shots ? `<div class="shots">${shots}</div>` : ""}
+  </section>`;
+}).join("");
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ---------- lightbox ---------- */
+const lb = document.getElementById("lb"), stage = document.getElementById("lbStage");
+let cur = { p: 0, i: 0 }, lastFocus = null;
+const zoomList = p => PROJECTS[p].images.filter(im => im.src);
+function draw() {
+  const imgs = zoomList(cur.p), im = imgs[cur.i];
+  stage.innerHTML = `<img src="${esc(im.src)}" alt="${esc(im.caption)}">`;
+  document.getElementById("lbCaption").textContent = `${PROJECTS[cur.p].title}: ${im.caption}`;
+  document.getElementById("lbCount").textContent = imgs.length > 1 ? `${cur.i + 1} / ${imgs.length}` : "";
+  document.getElementById("lbPrev").hidden = document.getElementById("lbNext").hidden = imgs.length < 2;
+}
+function openLb(p, i) { lastFocus = document.activeElement; cur = { p, i }; draw(); lb.classList.add("show"); document.getElementById("lbClose").focus(); }
+function closeLb() { lb.classList.remove("show"); lastFocus && lastFocus.focus(); }
+function step(d) { const n = zoomList(cur.p).length; cur.i = (cur.i + d + n) % n; draw(); }
+list.addEventListener("click", e => {
+  const z = e.target.closest(".zoom"); if (z) openLb(+z.dataset.p, +z.dataset.i);
+});
+document.getElementById("lbClose").onclick = closeLb;
+document.getElementById("lbPrev").onclick = () => step(-1);
+document.getElementById("lbNext").onclick = () => step(1);
+stage.addEventListener("click", closeLb);
+document.addEventListener("keydown", e => {
+  if (!lb.classList.contains("show")) return;
+  if (e.key === "Escape") closeLb();
+  if (e.key === "ArrowRight") step(1);
+  if (e.key === "ArrowLeft") step(-1);
+});
+
+/* ---------- build-time checks (console only, never shown to visitors) ---------- */
+const items = PROJECTS.reduce((n, p) => n + (p.images || []).length + (("vimeoId" in p) ? 1 : 0), 0);
+console.info(`Portfolio items: ${items} / 20`);
+if (items > 20) console.warn("Over the 20-item limit.");
+const todos = JSON.stringify(PROJECTS).match(/TODO[^"]*/g) || [];
+if (todos.length) console.warn(`${todos.length} TODO placeholder(s) left:`, todos);
+PROJECTS.forEach(p => { if ("vimeoId" in p && !p.vimeoId) console.warn(`Missing Vimeo ID: ${p.title}`); });
+</script>
+</body>
+</html>
