@@ -54,6 +54,7 @@ a:active, button:active { opacity: .7; }
 .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1rem; align-items: start; margin-top: 1.2rem; }
 .shots figure { margin: 0; }
 .shots img { display: block; width: 100%; height: auto; }
+  .shots.two { grid-template-columns: repeat(2, 1fr); }
 .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 figcaption { margin-top: .5em; font-size: 13px; color: var(--muted); max-width: 78ch; }
 .video { position: relative; width: 100%; aspect-ratio: 16 / 9; margin-top: 1.2rem; background: #000; }
@@ -80,6 +81,7 @@ figcaption { margin-top: .5em; font-size: 13px; color: var(--muted); max-width: 
 
 @media (max-width: 600px) {
   .meta { grid-template-columns: 1fr; gap: 0; }
+  .shots.two { grid-template-columns: 1fr; }
   .meta dt { margin-top: .5em; }
   .lightbox { padding-left: 1rem; padding-right: 1rem; }
 }
@@ -292,6 +294,7 @@ const PROJECTS = [
  
   {
     "title": "Paintings",
+    "columns": 2,
     "meta": {
       "Year": "2023–25"
     },
@@ -373,7 +376,7 @@ list.innerHTML = PROJECTS.map((p, pi) => {
     <p class="desc">${esc(p.desc)}</p>
     ${(p.links || []).length ? `<p class="plinks">${p.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</p>` : ""}
     ${video}
-    ${shots ? `<div class="shots">${shots}</div>` : ""}
+    ${shots ? `<div class="shots${p.columns === 2 ? " two" : ""}">${shots}</div>` : ""}
   </section>`;
 }).join("");
 
