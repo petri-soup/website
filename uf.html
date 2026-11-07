@@ -54,7 +54,7 @@ a:active, button:active { opacity: .7; }
 .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1rem; align-items: start; margin-top: 1.2rem; }
 .shots figure { margin: 0; }
 .shots img { display: block; width: 100%; height: auto; }
-  .shots.two { grid-template-columns: repeat(2, 1fr); }
+.shots.two { grid-template-columns: repeat(2, 1fr); }
 .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 figcaption { margin-top: .5em; font-size: 13px; color: var(--muted); max-width: 78ch; }
 .video { position: relative; width: 100%; aspect-ratio: 16 / 9; margin-top: 1.2rem; background: #000; }
@@ -123,7 +123,12 @@ figcaption { margin-top: .5em; font-size: 13px; color: var(--muted); max-width: 
    meta              label/value rows (Year, Medium, Role, ...)
    links             [{ label, url }]
    images            [{ src, caption }]   src "" shows a "TODO" box
-   vimeoId           optional: embeds one video (ID only)
+   vimeoId           one video (ID only)
+   vimeoIds          several videos: ["id1", "id2"]
+   columns           set to 2 for two images per row
+
+   EVERY entry needs a comma after its closing } or ] when
+   something follows it. A missing comma makes the page blank.
 
    Limits to respect: 20 items total (each image and each video
    counts as 1). Check the console (F12) for your running count
@@ -168,8 +173,8 @@ const PROJECTS = [
         "url": "https://petri-soup.github.io/paleomythica-bestiary/"
       }
     ],
-    "vimeoId": "1243085711",
-    
+    "vimeoIds": ["1243085711", "1244685656"],
+    "columns": 2,
     "images": [
       {
         "src": "images/paleo1.jpg",
@@ -178,10 +183,7 @@ const PROJECTS = [
       {
         "src": "images/paleo5.jpg",
         "caption": "aerial map of game"
-      }
-    ]
-    "vimeoId": "1244685656",
-   "images": [
+      },
       {
         "src": "images/evogeneao-2.jpg",
         "caption": "still of CGI Animation"
@@ -192,8 +194,7 @@ const PROJECTS = [
       }
     ]
   },
- 
-   {
+  {
     "title": "Evogeneao",
     "meta": {
       "Year": "2025",
@@ -207,10 +208,10 @@ const PROJECTS = [
         "url": "https://play.unity.com/en/games/bd86650d-5819-49b0-a4be-c7f25b4187e2/evogeneao"
       }
     ],
-     "vimeoId": "1244663803",
-    
+    "vimeoId": "1244663803",
+    "images": []
   },
-   {
+  {
     "title": "Tidelands 2100",
     "meta": {
       "Year": "2025–2026",
@@ -229,7 +230,7 @@ const PROJECTS = [
         "url": "https://3lfritz.itch.io/tidelands-2100"
       }
     ],
-     "vimeoId": "1243086634",
+    "vimeoId": "1243086634",
     "images": [
       {
         "src": "images/tidelands2.jpg",
@@ -241,7 +242,7 @@ const PROJECTS = [
       }
     ]
   },
-   {
+  {
     "title": "Nature in Place: AR for Climate Resilience (ENACTS)",
     "meta": {
       "Year": "2025–26",
@@ -295,8 +296,6 @@ const PROJECTS = [
     "vimeoId": "1001774532",
     "images": []
   },
- 
- 
   {
     "title": "Paintings",
     "columns": 2,
@@ -323,7 +322,7 @@ const PROJECTS = [
         "src": "images/OldIslandia.jpg",
         "caption": "Old Islandia, New Frontier, 2025. Oil on canvas, 52 × 38 in."
       },
-        {
+      {
         "src": "images/SpringsandSecretSources.jpg",
         "caption": "Antikythera, 2024–25. Oil on canvas, 72 × 38 in."
       },
@@ -333,7 +332,7 @@ const PROJECTS = [
       }
     ]
   },
-   {
+  {
     "title": "Ceramics",
     "meta": {
       "Year": "TODO",
@@ -346,14 +345,13 @@ const PROJECTS = [
         "src": "images/All_Ceramic.jpg",
         "caption": "ceramic fossil tests (TODO: add year, clay and glaze, dimensions)"
       }
-      
-     
     ]
   }
 ];
 
 /* ---------- helpers ---------- */
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const videoIds = p => p.vimeoIds || ("vimeoId" in p ? [p.vimeoId] : []);
 
 /* ---------- render ---------- */
 const list = document.getElementById("list");
@@ -369,11 +367,9 @@ list.innerHTML = PROJECTS.map((p, pi) => {
       <figcaption>${esc(im.caption)}</figcaption>
     </figure>`;
   }).join("");
-  const video = ("vimeoId" in p)
-    ? (p.vimeoId
-        ? `<div class="video"><iframe src="https://player.vimeo.com/video/${esc(p.vimeoId)}?dnt=1" title="${esc(p.title)} (video)" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
-        : `<div class="video missing">Add this video’s Vimeo ID</div>`)
-    : "";
+  const video = videoIds(p).map(id => id
+    ? `<div class="video"><iframe src="https://player.vimeo.com/video/${esc(id)}?dnt=1" title="${esc(p.title)} (video)" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
+    : `<div class="video missing">Add this video’s Vimeo ID</div>`).join("");
   const meta = Object.entries(p.meta || {});
   return `
   <section class="project">
@@ -417,12 +413,12 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- build-time checks (console only, never shown to visitors) ---------- */
-const items = PROJECTS.reduce((n, p) => n + (p.images || []).length + (("vimeoId" in p) ? 1 : 0), 0);
+const items = PROJECTS.reduce((n, p) => n + (p.images || []).length + videoIds(p).length, 0);
 console.info(`Portfolio items: ${items} / 20`);
 if (items > 20) console.warn("Over the 20-item limit.");
 const todos = JSON.stringify(PROJECTS).match(/TODO[^"]*/g) || [];
 if (todos.length) console.warn(`${todos.length} TODO placeholder(s) left:`, todos);
-PROJECTS.forEach(p => { if ("vimeoId" in p && !p.vimeoId) console.warn(`Missing Vimeo ID: ${p.title}`); });
+PROJECTS.forEach(p => { if (videoIds(p).some(id => !id)) console.warn(`Missing Vimeo ID: ${p.title}`); });
 </script>
 </body>
 </html>
